@@ -194,11 +194,11 @@ trait InteractsWithSSM
     {
         $path = '.env.' . $this->stage;
 
-        if (!file_exists($path)) {
-            throw new InvalidArgumentException("'$path' doesn't exists.");
+        if (file_exists($path)) {
+            return collect($this->getDotenv()->parse(file_get_contents($path)));
         }
 
-        return collect($this->getDotenv()->parse(file_get_contents($path)));
+        return collect();
     }
 
     /**

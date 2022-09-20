@@ -4,6 +4,7 @@ namespace Nandi95\LaravelEnvInAwsSsm\Console;
 
 use Exception;
 use Illuminate\Console\Command;
+use InvalidArgumentException;
 use Nandi95\LaravelEnvInAwsSsm\Traits\InteractsWithSSM;
 
 class EnvPush extends Command
@@ -34,6 +35,10 @@ class EnvPush extends Command
     public function handle(): int
     {
         $this->stage = $this->argument('stage');
+
+        if (!file_exists('.env.' . $this->stage)) {
+            throw new InvalidArgumentException("'.env.$this->stage' doesn't exists.");
+        }
 
         $localEnvs = $this->getEnvironmentVarsFromFile();
         $bar = $this->getOutput()->createProgressBar($localEnvs->count() + 1);
