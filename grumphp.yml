@@ -1,0 +1,12 @@
+grumphp:
+  hide_circumvention_tip: true
+  stop_on_failure: true
+  ignore_unstaged_changes: true
+  tasks:
+#    phpstan:
+#      configuration: phpstan.neon
+#      memory_limit: "-1"
+#    phpcsfixer:
+#      cache_file: .php-cs-fixer.cache
+#      config: .php-cs-fixer.php
+    composer: ~

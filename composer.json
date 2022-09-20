@@ -1,0 +1,63 @@
+{
+    "name": "nandi95/laravel-env-in-aws-ssm",
+    "version": "0.1.0",
+    "description": "Manage your environment variables in in AWS' SSM Parameter store",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Nandi95\\LaravelEnvInAwsSsm\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Nandi95\\LaravelEnvInAwsSsm\\EnvInAwsSsmServiceProvider"
+            ]
+        }
+    },
+    "authors": [
+        {
+            "name": "Nandor Kraszlan",
+            "email": "nandor.kraszlan@gmail.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require-dev": {
+        "php": ">=8.0",
+        "orchestra/testbench": "^7.0",
+        "phpunit/phpunit": "^9.5",
+        "roave/security-advisories": "dev-latest",
+        "friendsofphp/php-cs-fixer": "^3.11",
+        "phpmd/phpmd": "^2.13",
+        "phpro/grumphp": "^1.13",
+        "nunomaduro/larastan": "^2.2"
+    },
+    "require": {
+        "aws/aws-sdk-php": "^3.235",
+        "symfony/dotenv": "^6.1"
+    },
+    "config": {
+        "allow-plugins": {
+            "phpro/grumphp": true
+        }
+    },
+    "scripts": {
+        "post-update-cmd": [
+            "Scripts\\ComposerScripts::devModeOnly",
+            "@php ./vendor/bin/grumphp git:init"
+        ],
+        "sniff": [
+            "./vendor/bin/php-cs-fixer fix -vvv --dry-run --show-progress=dots"
+        ],
+        "lint": [
+            "./vendor/bin/php-cs-fixer fix -vv --show-progress=dots"
+        ],
+        "phpstan": [
+            "./vendor/bin/phpstan analyse --memory-limit=2G"
+        ],
+        "php-md": [
+            "./vendor/bin/phpmd src ansi ./phpmd-ruleset.xml"
+        ]
+    }
+}
