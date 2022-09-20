@@ -7,7 +7,6 @@ use Aws\Ssm\SsmClient;
 use Exception;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
-use InvalidArgumentException;
 use Symfony\Component\Dotenv\Dotenv;
 
 trait InteractsWithSSM
@@ -15,40 +14,40 @@ trait InteractsWithSSM
     /**
      * The stage/environment of the app.
      *
-     * @var string|null
+     * @var string
      */
-    protected string|null $stage;
+    protected string $stage;
 
     /**
      * The name of the app.
      *
-     * @var string|null
+     * @var string
      */
-    private string|null $appName;
+    private string $appName;
 
     /**
      * The region we're operating in.
      *
-     * @var string|null
+     * @var string
      */
-    private string|null $region;
+    private string $region;
 
     /**
      * The Dotenv instance.
      *
-     * @var Dotenv|null
+     * @var Dotenv
      */
-    private Dotenv|null $dotEnv;
+    private Dotenv $dotEnv;
 
     /**
-     * @var Credentials|null
+     * @var Credentials
      */
-    private Credentials|null $credentials;
+    private Credentials $credentials;
 
     /**
-     * @var SsmClient|null
+     * @var SsmClient
      */
-    private SsmClient|null $client;
+    private SsmClient $client;
 
     /**
      * Get the parameter name as a qualified path
@@ -133,12 +132,12 @@ trait InteractsWithSSM
         if (file_exists('.env.' . $this->stage)) {
             $env = $this->getDotenv()->parse(file_get_contents('.env.' . $this->stage));
 
-            if ($env['AWS_DEFAULT_REGION']) {
+            if (isset($env['AWS_DEFAULT_REGION'])) {
                 $this->region = $env['AWS_DEFAULT_REGION'];
             }
         }
 
-        if (!$this->region) {
+        if (!isset($this->region)) {
             $this->region = $this->ask('AWS Region');
         }
 
@@ -180,7 +179,7 @@ trait InteractsWithSSM
             $appName = $this->getEnvironmentVarsFromFile()->get('APP_NAME');
         }
 
-        $this->appName = $appName ?? $this->ask('app name');
+        $this->appName = $appName ?? $this->ask('App name');
 
         return $this->appName;
     }

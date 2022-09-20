@@ -48,7 +48,13 @@ class EnvPush extends Command
         $remoteKeysNotInLocal = $remoteEnvs->diffKeys($localEnvs);
 
         // user deleted some keys, remove from remote too
-        if ($remoteKeysNotInLocal->count()) {
+        if ($remoteKeysNotInLocal->isNotEmpty()) {
+            $this->info($remoteKeysNotInLocal->count() . ' variables found not present in .env.' . $this->stage . '. Deleting removed keys.');
+            if ($localEnvs->isEmpty()) {
+                $this->warn('There are no environment variables set locally.');
+                $this->confirm('This will remove all variables in SSM, are you sure you want to proceed?');
+            }
+
             $qualifiedKeys = $remoteKeysNotInLocal
                 ->keys()
                 ->map(fn (string $key) => $this->qualifyKey($key))

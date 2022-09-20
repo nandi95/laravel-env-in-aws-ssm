@@ -1,6 +1,6 @@
 {
     "name": "nandi95/laravel-env-in-aws-ssm",
-    "version": "0.1.1",
+    "version": "0.1.2",
     "description": "Manage your environment variables in AWS' SSM Parameter store",
     "type": "library",
     "license": "MIT",

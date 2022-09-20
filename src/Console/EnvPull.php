@@ -4,6 +4,8 @@ namespace Nandi95\LaravelEnvInAwsSsm\Console;
 
 use Exception;
 use Illuminate\Console\Command;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
 use Nandi95\LaravelEnvInAwsSsm\Traits\InteractsWithSSM;
 
 class EnvPull extends Command
@@ -35,14 +37,16 @@ class EnvPull extends Command
     {
         $this->stage = $this->argument('stage');
 
-        // todo group by the first part before `_` and add extra line in between in the output
-        $resolvedEnv = $this->getEnvironmentVarsFromRemote()
+        $resolvedEnv = '';
+
+        $this->getEnvironmentVarsFromRemote()
             ->sortKeys()
-            ->reduce(function (string $resolvedGroup, string $val, string $key) {
-                    return $resolvedGroup . $key . '=' . $val . "\n";
-                    },
-                ''
-            );
+            ->mapToGroups(function ($value, $key) {
+                return [Str::before($key, '_') => $key . '=' . $value];
+            })
+            ->each(static function (Collection $envs) use (&$resolvedEnv) {
+                $resolvedEnv .= $envs->join("\n") . "\n\n";
+            });
 
         if (file_exists('.env.' . $this->stage)) {
             $this->backupEnvFile();
