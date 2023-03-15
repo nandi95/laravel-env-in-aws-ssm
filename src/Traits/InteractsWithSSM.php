@@ -138,7 +138,7 @@ trait InteractsWithSSM
         }
 
         if (!isset($this->region)) {
-            $this->region = $this->ask('AWS Region');
+            $this->region = $this->ask('AWS_DEFAULT_REGION');
         }
 
         return $this->region;

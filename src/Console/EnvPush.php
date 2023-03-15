@@ -16,7 +16,12 @@ class EnvPush extends Command
      *
      * @var string
      */
-    protected $signature = 'env:push {stage} {--appName=} {--secretKey=} {--accessKey=} {--region=}';
+    protected $signature = 'env:push
+                            {stage : The environment of the app}
+                            {--appName=}
+                            {--secretKey=}
+                            {--accessKey=}
+                            {--region=}';
 
     /**
      * The console command description.

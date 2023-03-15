@@ -1,6 +1,6 @@
 {
     "name": "nandi95/laravel-env-in-aws-ssm",
-    "version": "0.1.2",
+    "version": "0.2.0",
     "description": "Manage your environment variables in AWS' SSM Parameter store",
     "type": "library",
     "license": "MIT",
@@ -24,9 +24,9 @@
     ],
     "minimum-stability": "stable",
     "require-dev": {
-        "php": ">=8.0",
-        "orchestra/testbench": "^7.0",
-        "phpunit/phpunit": "^9.5",
+        "php": ">=8.1",
+        "orchestra/testbench": "^8.0.8",
+        "phpunit/phpunit": "^10.0.16",
         "roave/security-advisories": "dev-latest",
         "friendsofphp/php-cs-fixer": "^3.11",
         "phpmd/phpmd": "^2.13",

@@ -17,7 +17,12 @@ class EnvPull extends Command
      *
      * @var string
      */
-    protected $signature = 'env:pull {stage} {--appName=} {--secretKey=} {--accessKey=} {--region=}';
+    protected $signature = 'env:pull
+                            {stage : The environment of the app}
+                            {--appName=}
+                            {--secretKey=}
+                            {--accessKey=}
+                            {--region=}';
 
     /**
      * The console command description.
