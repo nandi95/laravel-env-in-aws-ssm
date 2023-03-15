@@ -13,6 +13,7 @@ This package provides two commands:
 ```shell
 php artisan env:push
 php artisan env:pull
+php artisan env:list
 ```
 
 ### Arguments:
