@@ -44,7 +44,7 @@ class EnvPull extends Command
 
         $resolvedEnv = '';
 
-        $this->getEnvironmentVarsFromRemote()
+        $this->unifySplitValues($this->getEnvironmentVarsFromRemote())
             ->sortKeys()
             ->mapToGroups(function ($value, $key) {
                 return [Str::before($key, '_') => $key . '=' . $value];

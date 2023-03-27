@@ -232,4 +232,30 @@ trait InteractsWithSSM
 
         return $parameters;
     }
+
+    /**
+     * Unify values that were split into multiple parameters due to size.
+     *
+     * @param Collection $keyValues
+     *
+     * @return Collection
+     */
+    public function unifySplitValues(Collection $keyValues): Collection
+    {
+        $unified = collect();
+
+        $keyValues->each(function ($value, $key) use ($unified) {
+            if (preg_match('/\.(part)\d+$/', $key) === 1) {
+                $key = Str::beforeLast($key, '.part');
+
+                if ($unified->has($key)) {
+                    $value = $unified->get($key) . $value;
+                }
+            }
+
+            $unified->put($key, $value);
+        });
+
+        return $unified;
+    }
 }

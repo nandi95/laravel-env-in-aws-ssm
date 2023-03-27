@@ -1,7 +1,7 @@
 # laravel-env-in-aws-ssm
 > Manage your environment variables in in AWS' SSM Parameter store
 
-Download or upload your .env files into the free [AWS's SSM](https://eu-west-2.console.aws.amazon.com/systems-manager/parameters) store. This allows you to store up to 10,000 keys with sizes up to 4kb. More advanced options are available subject to your [quota](https://docs.aws.amazon.com/general/latest/gr/ssm.html).
+Download or upload your .env files into the free [AWS's SSM](https://eu-west-2.console.aws.amazon.com/systems-manager/parameters) store. This allows you to store up to 10,000 keys over your aws account in each region. More keys are available subject to your [quota](https://docs.aws.amazon.com/general/latest/gr/ssm.html).
 
 This provides a good companion to referencing env values in cloudformation, serverless framework or to download within runners in other forms of Continuous Deployment processes.
 

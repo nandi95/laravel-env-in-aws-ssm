@@ -4,6 +4,7 @@ namespace Nandi95\LaravelEnvInAwsSsm\Console;
 
 use Exception;
 use Illuminate\Console\Command;
+use Illuminate\Support\Str;
 use InvalidArgumentException;
 use Nandi95\LaravelEnvInAwsSsm\Traits\InteractsWithSSM;
 
@@ -46,29 +47,44 @@ class EnvPush extends Command
         }
 
         $localEnvs = $this->getEnvironmentVarsFromFile();
-        $bar = $this->getOutput()->createProgressBar($localEnvs->count() + 1);
+
+        // SSM parameter store has a limit of 4kb per value for standard quota
+        [$over, $under] = $localEnvs->partition(fn (string $val) => Str::length($val) >= 4096);
+
+        $over->each(function (string $val, string $key) use ($under) {
+            $this->warn("Value for $key is over 4kb, splitting into multiple keys.");
+
+            collect(mb_str_split($val, 4096))
+                ->each(function (string $chunk, int $index) use ($key, $under) {
+                    $under->put($key . '.part' . $index, $chunk);
+                });
+        });
+
+        $bar = $this->getOutput()->createProgressBar($under->count() + 1);
         $remoteEnvs = $this->getEnvironmentVarsFromRemote();
         $bar->advance();
 
-        $remoteKeysNotInLocal = $remoteEnvs->diffKeys($localEnvs);
+        $remoteKeysNotInLocal = $remoteEnvs->diffKeys($under);
 
         // user deleted some keys, remove from remote too
         if ($remoteKeysNotInLocal->isNotEmpty()) {
+            $bar->clear();
             $this->info($remoteKeysNotInLocal->count() . ' variables found not present in .env.' . $this->stage . '. Deleting removed keys.');
-            if ($localEnvs->isEmpty()) {
+            $bar->display();
+            if ($under->isEmpty()) {
                 $this->warn('There are no environment variables set locally.');
                 $this->confirm('This will remove all variables in SSM, are you sure you want to proceed?');
             }
 
             $qualifiedKeys = $remoteKeysNotInLocal
                 ->keys()
-                ->map(fn (string $key) => $this->qualifyKey($key))
+                ->map(fn(string $key) => $this->qualifyKey($key))
                 ->toArray();
 
             $this->getClient()->deleteParameters(['Names' => $qualifiedKeys]);
         }
 
-        $localEnvs->each(function (string $val, string $key) use ($bar) {
+        $under->each(function (string $val, string $key) use ($bar) {
             retry(
                 [3000, 6000, 9000],
                 fn () => $this->getClient()->putParameter([

@@ -42,7 +42,7 @@ class EnvList extends Command
     public function handle(): int
     {
         $this->stage = $this->argument('stage');
-        $keyValues = $this->getEnvironmentVarsFromRemote()->sortKeys();
+        $keyValues = $this->unifySplitValues($this->getEnvironmentVarsFromRemote()->sortKeys());
 
         if ($this->option('key')) {
             $keyValues = $keyValues->filter(fn ($value, $key) => $key === $this->option('key'));
