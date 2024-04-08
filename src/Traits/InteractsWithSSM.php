@@ -60,6 +60,7 @@ trait InteractsWithSSM
      */
     public function qualifyKey(string $name): string
     {
+        // todo - replace with tagging? https://docs.aws.amazon.com/systems-manager/latest/userguide/tagging-parameters.html
         return '/' . $this->getAppName() . '/' . $this->stage . '/' . $name;
     }
 
