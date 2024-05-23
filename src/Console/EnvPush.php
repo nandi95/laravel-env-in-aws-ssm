@@ -80,7 +80,7 @@ class EnvPush extends Command
 
             $qualifiedKeys = $remoteKeysNotInLocal
                 ->keys()
-                ->map(fn(string $key): string => $this->qualifyKey($key))
+                ->map(fn (string $key): string => $this->qualifyKey($key))
                 ->toArray();
 
             $this->getClient()->deleteParameters(['Names' => $qualifiedKeys]);

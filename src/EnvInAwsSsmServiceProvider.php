@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Nandi95\LaravelEnvInAwsSsm;
 
+use Illuminate\Support\ServiceProvider;
 use Nandi95\LaravelEnvInAwsSsm\Console\EnvList;
 use Nandi95\LaravelEnvInAwsSsm\Console\EnvPull;
 use Nandi95\LaravelEnvInAwsSsm\Console\EnvPush;
-use Illuminate\Support\ServiceProvider;
 
 class EnvInAwsSsmServiceProvider extends ServiceProvider
 {

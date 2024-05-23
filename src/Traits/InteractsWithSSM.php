@@ -38,11 +38,9 @@ trait InteractsWithSSM
     private SsmClient $client;
 
     /**
-     * Get the parameter name as a qualified path
+     * Get the parameter name as a qualified path.
      *
      * @link https://docs.aws.amazon.com/systems-manager/latest/APIReference/API_PutParameter.html#systemsmanager-PutParameter-request-Name
-     *
-     *
      */
     public function qualifyKey(string $name): string
     {
@@ -52,8 +50,6 @@ trait InteractsWithSSM
 
     /**
      * Get the key without the aws namespace.
-     *
-     *
      */
     public function unQualifyKey(string $name): string
     {
@@ -103,6 +99,7 @@ trait InteractsWithSSM
 
         if ($this->option('region')) {
             $this->region = $this->option('region');
+
             return $this->region;
         }
 
@@ -208,8 +205,6 @@ trait InteractsWithSSM
 
     /**
      * Unify values that were split into multiple parameters due to size.
-     *
-     *
      */
     public function unifySplitValues(Collection $keyValues): Collection
     {

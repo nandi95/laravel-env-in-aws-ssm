@@ -47,7 +47,7 @@ class EnvPull extends Command
 
         $this->unifySplitValues($this->getEnvironmentVarsFromRemote())
             ->sortKeys()
-            ->mapToGroups(fn($value, $key): array => [Str::before($key, '_') => $key . '=' . $value])
+            ->mapToGroups(fn ($value, $key): array => [Str::before($key, '_') => $key . '=' . $value])
             ->each(static function (Collection $envs) use (&$resolvedEnv): void {
                 $resolvedEnv .= $envs->join("\n") . "\n\n";
             });
@@ -68,6 +68,7 @@ class EnvPull extends Command
 
         if (file_exists($backupFile)) {
             $this->info("Skipping backing up, $backupFile already exists.");
+
             return;
         }
 
