@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Nandi95\LaravelEnvInAwsSsm\Console;
 
 use Exception;
@@ -34,7 +36,6 @@ class EnvPush extends Command
     /**
      * Execute the console command.
      *
-     * @return int
      *
      * @throws Exception
      */
@@ -49,13 +50,14 @@ class EnvPush extends Command
         $localEnvs = $this->getEnvironmentVarsFromFile();
 
         // SSM parameter store has a limit of 4kb per value for standard quota
-        [$over, $under] = $localEnvs->partition(fn (string $val) => Str::length($val) >= 4096);
+        // todo - detect encoding and calculate size accordingly
+        [$over, $under] = $localEnvs->partition(fn (string $val): bool => Str::length($val) >= 4096);
 
-        $over->each(function (string $val, string $key) use ($under) {
+        $over->each(function (string $val, string $key) use ($under): void {
             $this->warn("Value for $key is over 4kb, splitting into multiple keys.");
 
             collect(mb_str_split($val, 4096))
-                ->each(function (string $chunk, int $index) use ($key, $under) {
+                ->each(function (string $chunk, int $index) use ($key, $under): void {
                     $under->put($key . '.part' . $index, $chunk);
                 });
         });
@@ -78,13 +80,13 @@ class EnvPush extends Command
 
             $qualifiedKeys = $remoteKeysNotInLocal
                 ->keys()
-                ->map(fn(string $key) => $this->qualifyKey($key))
+                ->map(fn(string $key): string => $this->qualifyKey($key))
                 ->toArray();
 
             $this->getClient()->deleteParameters(['Names' => $qualifiedKeys]);
         }
 
-        $under->each(function (string $val, string $key) use ($bar) {
+        $under->each(function (string $val, string $key) use ($bar): void {
             retry(
                 [3000, 6000, 9000],
                 fn () => $this->getClient()->putParameter([

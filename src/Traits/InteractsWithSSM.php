@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Nandi95\LaravelEnvInAwsSsm\Traits;
 
 use Aws\Credentials\Credentials;
@@ -13,40 +15,26 @@ trait InteractsWithSSM
 {
     /**
      * The stage/environment of the app.
-     *
-     * @var string
      */
     protected string $stage;
 
     /**
      * The name of the app.
-     *
-     * @var string
      */
     private string $appName;
 
     /**
      * The region we're operating in.
-     *
-     * @var string
      */
     private string $region;
 
     /**
      * The Dotenv instance.
-     *
-     * @var Dotenv
      */
     private Dotenv $dotEnv;
 
-    /**
-     * @var Credentials
-     */
     private Credentials $credentials;
 
-    /**
-     * @var SsmClient
-     */
     private SsmClient $client;
 
     /**
@@ -54,9 +42,7 @@ trait InteractsWithSSM
      *
      * @link https://docs.aws.amazon.com/systems-manager/latest/APIReference/API_PutParameter.html#systemsmanager-PutParameter-request-Name
      *
-     * @param string $name
      *
-     * @return string
      */
     public function qualifyKey(string $name): string
     {
@@ -67,18 +53,13 @@ trait InteractsWithSSM
     /**
      * Get the key without the aws namespace.
      *
-     * @param string $name
      *
-     * @return string
      */
     public function unQualifyKey(string $name): string
     {
         return Str::afterLast($name, '/');
     }
 
-    /**
-     * @return Dotenv
-     */
     public function getDotenv(): Dotenv
     {
         if (!isset($this->dotEnv)) {
@@ -88,9 +69,6 @@ trait InteractsWithSSM
         return $this->dotEnv;
     }
 
-    /**
-     * @return Credentials
-     */
     public function getCredentials(): Credentials
     {
         if (isset($this->credentials)) {
@@ -116,8 +94,6 @@ trait InteractsWithSSM
 
     /**
      * Get the region we're operating in.
-     *
-     * @return string
      */
     public function getRegion(): string
     {
@@ -147,8 +123,6 @@ trait InteractsWithSSM
 
     /**
      * Get the SSM client.
-     *
-     * @return SsmClient
      */
     public function getClient(): SsmClient
     {
@@ -165,8 +139,6 @@ trait InteractsWithSSM
 
     /**
      * Get the name of the app.
-     *
-     * @return string
      */
     public function getAppName(): string
     {
@@ -214,7 +186,7 @@ trait InteractsWithSSM
     {
         $arguments = ['Path' => '/' . $this->getAppName() . '/' . $this->stage];
 
-        if ($nextToken) {
+        if ($nextToken !== null && $nextToken !== '' && $nextToken !== '0') {
             $arguments['NextToken'] = $nextToken;
         }
 
@@ -224,7 +196,7 @@ trait InteractsWithSSM
         );
 
         $parameters = collect($awsResult['Parameters'])
-            ->mapWithKeys(fn (array $parameter) => [$this->unQualifyKey($parameter['Name']) => $parameter['Value']]);
+            ->mapWithKeys(fn (array $parameter): array => [$this->unQualifyKey($parameter['Name']) => $parameter['Value']]);
 
         if ($awsResult['NextToken']) {
             $this->getEnvironmentVarsFromRemote($awsResult['NextToken'])
@@ -237,15 +209,13 @@ trait InteractsWithSSM
     /**
      * Unify values that were split into multiple parameters due to size.
      *
-     * @param Collection $keyValues
      *
-     * @return Collection
      */
     public function unifySplitValues(Collection $keyValues): Collection
     {
         $unified = collect();
 
-        $keyValues->each(function ($value, $key) use ($unified) {
+        $keyValues->each(function ($value, $key) use ($unified): void {
             if (preg_match('/\.(part)\d+$/', $key) === 1) {
                 $key = Str::beforeLast($key, '.part');
 

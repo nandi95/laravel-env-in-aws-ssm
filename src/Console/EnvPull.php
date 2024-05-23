@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Nandi95\LaravelEnvInAwsSsm\Console;
 
 use Exception;
@@ -34,7 +36,6 @@ class EnvPull extends Command
     /**
      * Execute the console command.
      *
-     * @return int
      *
      * @throws Exception
      */
@@ -46,10 +47,8 @@ class EnvPull extends Command
 
         $this->unifySplitValues($this->getEnvironmentVarsFromRemote())
             ->sortKeys()
-            ->mapToGroups(function ($value, $key) {
-                return [Str::before($key, '_') => $key . '=' . $value];
-            })
-            ->each(static function (Collection $envs) use (&$resolvedEnv) {
+            ->mapToGroups(fn($value, $key): array => [Str::before($key, '_') => $key . '=' . $value])
+            ->each(static function (Collection $envs) use (&$resolvedEnv): void {
                 $resolvedEnv .= $envs->join("\n") . "\n\n";
             });
 
@@ -62,12 +61,9 @@ class EnvPull extends Command
         return 0;
     }
 
-    /**
-     * @return void
-     */
     public function backupEnvFile(): void
     {
-        $this->line('Backing up \'' . '.env.' . $this->stage . '\'');
+        $this->line('Backing up \'.env.' . $this->stage . '\'');
         $backupFile = '.env.' . $this->stage . '.backup';
 
         if (file_exists($backupFile)) {

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Nandi95\LaravelEnvInAwsSsm\Console;
 
 use Exception;
@@ -35,7 +37,6 @@ class EnvList extends Command
     /**
      * Execute the console command.
      *
-     * @return int
      *
      * @throws Exception
      */
@@ -45,12 +46,12 @@ class EnvList extends Command
         $keyValues = $this->unifySplitValues($this->getEnvironmentVarsFromRemote()->sortKeys());
 
         if ($this->option('key')) {
-            $keyValues = $keyValues->filter(fn ($value, $key) => $key === $this->option('key'));
+            $keyValues = $keyValues->filter(fn ($value, $key): bool => $key === $this->option('key'));
         }
 
         $this->table(
             ['Key', 'Value'],
-            $keyValues->map(fn ($value, $key) => [$key, $value])->toArray()
+            $keyValues->map(fn ($value, $key): array => [$key, $value])->toArray()
         );
 
         return 0;

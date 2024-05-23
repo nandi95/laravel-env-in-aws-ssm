@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Nandi95\LaravelEnvInAwsSsm;
 
 use Nandi95\LaravelEnvInAwsSsm\Console\EnvList;
