@@ -210,9 +210,12 @@ trait InteractsWithSSM
      *
      * @throws Exception
      */
-    public function getEnvironmentVarsFromRemote(string $nextToken = null): Collection
+    public function getEnvironmentVarsFromRemote(string $nextToken = null, bool $decrypt = false): Collection
     {
-        $arguments = ['Path' => '/' . $this->getAppName() . '/' . $this->stage];
+        $arguments = [
+            'Path' => '/' . $this->getAppName() . '/' . $this->stage,
+            'WithDecryption' => $decrypt,
+        ];
 
         if ($nextToken) {
             $arguments['NextToken'] = $nextToken;
