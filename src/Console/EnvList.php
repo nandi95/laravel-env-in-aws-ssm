@@ -44,7 +44,10 @@ class EnvList extends Command
     public function handle(): int
     {
         $this->stage = $this->argument('stage');
-        $this->decrypt = $this->option('decrypt') ? true : false;
+
+        if ($this->option('decrypt')) {
+            $this->decrypt = true;
+        }
 
         $keyValues = $this->unifySplitValues($this->getEnvironmentVarsFromRemote()->sortKeys());
 

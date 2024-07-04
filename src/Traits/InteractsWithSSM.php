@@ -29,6 +29,12 @@ trait InteractsWithSSM
     private string $region;
 
     /**
+     * @var bool Whether to decrypt the values.
+     * @link https://docs.aws.amazon.com/kms/latest/developerguide/services-parameter-store.html AWS documentation
+     */
+    private bool $decrypt = false;
+
+    /**
      * The Dotenv instance.
      */
     private Dotenv $dotEnv;
