@@ -31,7 +31,7 @@ php artisan env:list
     > See more details about encrypt in the [AWS documentation](https://docs.aws.amazon.com/kms/latest/developerguide/services-parameter-store.html)
 ---
 
-Both commands will use the env file respective to the stage argument. For example: with stage argument `production` it will work with the `.env.production` file. If the file exists when pulling, it will back up the existing file.
+All commands will use the env file respective to the stage argument. For example: with stage argument `production` it will work with the `.env.production` file. If the file exists when pulling, it will back up the existing file.
 
 ### Parameter <-> environment variable
 Keys are transformed in the following manner:
