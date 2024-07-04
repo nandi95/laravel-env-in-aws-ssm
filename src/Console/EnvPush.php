@@ -46,8 +46,9 @@ class EnvPush extends Command
             $this->decrypt = true;
         }
 
-        if (!file_exists('.env.' . $this->stage)) {
-            throw new InvalidArgumentException("'.env.$this->stage' doesn't exists.");
+        if (!file_exists(".env.$this->stage")) {
+            $this->error("'.env.$this->stage' doesn't exists.");
+            return self::FAILURE;
         }
 
         $localEnvs = $this->getEnvironmentVarsFromFile();
