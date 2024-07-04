@@ -23,7 +23,8 @@ class EnvList extends Command
                             {--appName=}
                             {--secretKey=}
                             {--accessKey=}
-                            {--region=}';
+                            {--region=}
+                            {--decrypt}';
 
     /**
      * The console command description.
@@ -42,6 +43,8 @@ class EnvList extends Command
     public function handle(): int
     {
         $this->stage = $this->argument('stage');
+        $this->decrypt = $this->option('decrypt') ? true : false;
+
         $keyValues = $this->unifySplitValues($this->getEnvironmentVarsFromRemote()->sortKeys());
 
         if ($this->option('key')) {
