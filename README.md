@@ -27,7 +27,7 @@ php artisan env:list
 
  - `--region=`(optional) - The region the infrastructure resides in. If not given, or cannot be found, it will prompt the user for it.
 
- - `--decrypt`(optional | Only in pull action) - Decrypt the values before pulling them.
+ - `--decrypt`(optional | Default: false) - Decrypt the values before pulling them.
     > See more details about encrypt in the [AWS documentation](https://docs.aws.amazon.com/kms/latest/developerguide/services-parameter-store.html)
 ---
 
