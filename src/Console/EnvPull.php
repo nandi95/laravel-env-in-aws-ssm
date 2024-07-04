@@ -37,7 +37,6 @@ class EnvPull extends Command
     /**
      * Execute the console command.
      *
-     *
      * @throws Exception
      */
     public function handle(): int
@@ -63,7 +62,7 @@ class EnvPull extends Command
 
         file_put_contents('.env.' . $this->stage, $resolvedEnv);
 
-        return 0;
+        return self::SUCCESS;
     }
 
     public function backupEnvFile(): void

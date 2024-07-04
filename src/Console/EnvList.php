@@ -6,8 +6,6 @@ namespace Nandi95\LaravelEnvInAwsSsm\Console;
 
 use Exception;
 use Illuminate\Console\Command;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Str;
 use Nandi95\LaravelEnvInAwsSsm\Traits\InteractsWithSSM;
 
 class EnvList extends Command
@@ -38,7 +36,6 @@ class EnvList extends Command
     /**
      * Execute the console command.
      *
-     *
      * @throws Exception
      */
     public function handle(): int
@@ -60,6 +57,6 @@ class EnvList extends Command
             $keyValues->map(fn ($value, $key): array => [$key, $value])->toArray()
         );
 
-        return 0;
+        return self::SUCCESS;
     }
 }

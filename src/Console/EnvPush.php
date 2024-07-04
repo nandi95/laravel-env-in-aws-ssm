@@ -7,7 +7,6 @@ namespace Nandi95\LaravelEnvInAwsSsm\Console;
 use Exception;
 use Illuminate\Console\Command;
 use Illuminate\Support\Str;
-use InvalidArgumentException;
 use Nandi95\LaravelEnvInAwsSsm\Traits\InteractsWithSSM;
 
 class EnvPush extends Command
@@ -37,7 +36,6 @@ class EnvPush extends Command
     /**
      * Execute the console command.
      *
-     *
      * @throws Exception
      */
     public function handle(): int
@@ -55,6 +53,7 @@ class EnvPush extends Command
         $localEnvs = $this->getEnvironmentVarsFromFile();
 
         // SSM parameter store has a limit of 4kb per value for standard quota
+        // todo - check quota type and split accordingly
         // todo - detect encoding and calculate size accordingly
         [$over, $under] = $localEnvs->partition(fn (string $val): bool => Str::length($val) >= 4096);
 
@@ -78,6 +77,7 @@ class EnvPush extends Command
             $bar->clear();
             $this->info($remoteKeysNotInLocal->count() . ' variables found not present in .env.' . $this->stage . '. Deleting removed keys.');
             $bar->display();
+
             if ($under->isEmpty()) {
                 $this->warn('There are no environment variables set locally.');
                 $this->confirm('This will remove all variables in SSM, are you sure you want to proceed?');
@@ -104,6 +104,6 @@ class EnvPush extends Command
             $bar->advance();
         });
 
-        return 0;
+        return self::SUCCESS;
     }
 }
