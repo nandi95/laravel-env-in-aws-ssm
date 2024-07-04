@@ -24,7 +24,8 @@ class EnvPull extends Command
                             {--appName=}
                             {--secretKey=}
                             {--accessKey=}
-                            {--region=}';
+                            {--region=}
+                            {--decrypt}';
 
     /**
      * The console command description.
@@ -42,6 +43,7 @@ class EnvPull extends Command
     public function handle(): int
     {
         $this->stage = $this->argument('stage');
+        $this->decrypt = $this->option('decrypt') ? true : false;
 
         $resolvedEnv = '';
 

@@ -27,6 +27,8 @@ php artisan env:list
 
  - `--region=`(optional) - The region the infrastructure resides in. If not given, or cannot be found, it will prompt the user for it.
 
+ - `--decrypt`(optional | Default: false) - Decrypt the values before pulling them.
+    > See more details about encrypt in the [AWS documentation](https://docs.aws.amazon.com/kms/latest/developerguide/services-parameter-store.html)
 ---
 
 Both commands will use the env file respective to the stage argument. For example: with stage argument `production` it will work with the `.env.production` file. If the file exists when pulling, it will back up the existing file.
