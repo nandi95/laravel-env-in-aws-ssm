@@ -22,7 +22,8 @@ class EnvPush extends Command
                             {--appName=}
                             {--secretKey=}
                             {--accessKey=}
-                            {--region=}';
+                            {--region=}
+                            {--decrypt}';
 
     /**
      * The console command description.
@@ -41,6 +42,7 @@ class EnvPush extends Command
     public function handle(): int
     {
         $this->stage = $this->argument('stage');
+        $this->decrypt = $this->option('decrypt') ? true : false;
 
         if (!file_exists('.env.' . $this->stage)) {
             throw new InvalidArgumentException("'.env.$this->stage' doesn't exists.");
